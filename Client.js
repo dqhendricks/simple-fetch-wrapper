@@ -14,6 +14,7 @@ export function request(endpoint, { body, ...customConfig } = {}) {
   }
   const config = {
     method: body ? "POST" : "GET",
+    body: body,
     ...customConfig,
     headers: {
       ...headers,
