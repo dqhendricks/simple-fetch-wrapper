@@ -1,18 +1,3 @@
-/*
-    usage example:
-
-    import * as client from "./Client";
-
-    client.request('login', {body: {username, password}}).then(
-        data => {
-            console.log('here the logged in user data', data);
-        },
-        error => {
-            console.error('oh no, login failed', error);
-        },
-    );
-*/
-
 const API_BASE_URL = "https://exampledomain.com";
 const LOCAL_STORAGE_KEY = "__your_site_token__"; // storage key for API authentication tokens
 
