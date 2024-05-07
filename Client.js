@@ -4,26 +4,28 @@ const LOCAL_STORAGE_KEY = "__your_site_token__"; // storage key for API authenti
 export function request(endpoint, { body, ...customConfig } = {}) {
   const token = localStorage.getItem(LOCAL_STORAGE_KEY);
   const headers = {};
-  // allow both FormData or Object fetch requests
-  if (body && body instanceof FormData !== true) {
-    body = JSON.stringify(body);
-    headers["content-type"] = "application/json";
-  }
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
   const config = {
     method: body ? "POST" : "GET",
-    body: body,
     ...customConfig,
     headers: {
       ...headers,
       ...customConfig.headers,
     },
   };
+  // allow both FormData or Object fetch requests
+  if (body) {
+    if (body instanceof FormData !== true) {
+      body = JSON.stringify(body);
+      headers["content-type"] = "application/json";
+    }
+    config.body = body;
+  }
 
   return fetch(`${API_BASE_URL}/${endpoint}`, config).then(async (response) => {
-    if (response.status === 401) { // error code indicating you've been logged out
+    if (response.status === 401) {
       logout();
       window.location.assign(window.location);
       return;
