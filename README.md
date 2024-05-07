@@ -6,7 +6,7 @@ This utility module extracts away some of the common additional fetch-related co
 * Default headers.
 * Auto-selects GET or POST based on existence of `body`, if not already set in the `config` argument.
 * Simple login and logout functions.
-* Local storage and automatic use of authentication tokens.
+* Local storage and automatic use of API authentication tokens.
 * Auto logout on 401 error response.
 * Conversion utilities for FormData->Object and Object->FormData.
 
