@@ -13,8 +13,8 @@
     );
 */
 
-const API_BASE_URL = "https://dustinhendricks.com";
-const LOCAL_STORAGE_KEY = "__dustin_hendricks_token__"; // storage key for API authentication tokens
+const API_BASE_URL = "https://exampledomain.com";
+const LOCAL_STORAGE_KEY = "__your_site_token__"; // storage key for API authentication tokens
 
 export function request(endpoint, { body, ...customConfig } = {}) {
   const token = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -37,7 +37,7 @@ export function request(endpoint, { body, ...customConfig } = {}) {
   };
 
   return fetch(`${API_BASE_URL}/${endpoint}`, config).then(async (response) => {
-    if (response.status === 401) {
+    if (response.status === 401) { // error code indicating you've been logged out
       logout();
       window.location.assign(window.location);
       return;
