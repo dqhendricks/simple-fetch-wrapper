@@ -1,5 +1,5 @@
 # simple-fetch-wrapper
-This utility module extracts away some of the common additional fetch-related code.
+This utility module abstract away some of the common additional fetch-related code.
 
 * Passes errors back as Promise rejections.
 * Seamlessly allows both Object or FormData request bodies.
