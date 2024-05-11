@@ -13,7 +13,7 @@ This JS utility module abstracts away some of the common additional fetch-relate
 **Usage example:**
 
 ```
-import * as client from "./Client";
+import * as client from "./Client.ts";
 
 client.request('login', {body: {username, password}}).then(
     data => {
