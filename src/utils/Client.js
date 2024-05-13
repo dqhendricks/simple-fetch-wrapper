@@ -57,7 +57,7 @@ export function formDataToObject(formData) {
   for (const key of formData.keys()) {
     const allItems = formData.getAll(key);
     objectData[key] = allItems.length > 1 ? allItems : allItems[0];
-  };
+  }
   return objectData;
 }
 
