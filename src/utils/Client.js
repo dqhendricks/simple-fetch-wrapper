@@ -54,10 +54,10 @@ export function isLoggedIn() {
 export function formDataToObject(formData) {
   // does not support multi-dimensional arrays
   const objectData = {};
-  formData.keys().forEach((key) => {
+  for (const key of formData.keys()) {
     const allItems = formData.getAll(key);
     objectData[key] = allItems.length > 1 ? allItems : allItems[0];
-  });
+  };
   return objectData;
 }
 
