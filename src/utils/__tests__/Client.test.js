@@ -1,8 +1,6 @@
 import { describe, test, expect, vi } from "vitest";
 
-import * as client from "../Client.ts";
-
-const defaultResponseObject = new Response();
+import * as client from "../Client";
 
 const fakeApiData = {
   name: "Joni Baez",
@@ -22,36 +20,27 @@ const fakeObjectRequest = {
   options: ["option 1", "option 2"],
 };
 
-vi.spyOn(window, "fetch").mockImplementation(
-  (
-    endpoint: RequestInfo | URL,
-    config: RequestInit | undefined,
-  ): Promise<Response> => {
-    switch (endpoint) {
-      case "https://examplewebsite.com/success":
-        return Promise.resolve({
-          ...defaultResponseObject,
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve(fakeApiData),
-        });
-      case "https://examplewebsite.com/failure":
-        return Promise.resolve({
-          ...defaultResponseObject,
-          ok: false,
-          status: 404,
-          text: () => Promise.resolve("Page not found."),
-        });
-      case "https://examplewebsite.com/unauthorized":
-        return Promise.resolve({
-          ...defaultResponseObject,
-          ok: false,
-          status: 401,
-        });
-    }
-    return new Promise(() => {});
-  },
-);
+vi.spyOn(window, "fetch").mockImplementation((endpoint, config) => {
+  switch (endpoint) {
+    case "https://examplewebsite.com/success":
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(fakeApiData),
+      });
+    case "https://examplewebsite.com/failure":
+      return Promise.resolve({
+        ok: false,
+        status: 404,
+        text: () => Promise.resolve("Page not found."),
+      });
+    case "https://examplewebsite.com/unauthorized":
+      return Promise.resolve({
+        ok: false,
+        status: 401,
+      });
+  }
+});
 
 describe("Client.js utility", () => {
   // fetching
