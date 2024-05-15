@@ -47,10 +47,6 @@ export function logout() {
   localStorage.removeItem(LOCAL_STORAGE_KEY);
 }
 
-export function isLoggedIn() {
-  return localStorage.getItem(LOCAL_STORAGE_KEY) === null;
-}
-
 export function formDataToObject(formData) {
   // does not support multi-dimensional arrays
   const objectData = {};
