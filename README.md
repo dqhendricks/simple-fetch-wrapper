@@ -32,7 +32,7 @@ import * as client from "./Client.ts";
 
 client.addStatusHandler(401, () => {
   // unauthorized request
-  // do soomething like set isAuthenticated to false in global state here
+  // do something like set isAuthenticated to false in global state here
 });
 
 client.addResponseInterceptor((data) => {
