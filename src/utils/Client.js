@@ -1,14 +1,33 @@
+/*
+    usage example:
+
+    import * as client from "./client";
+
+    client.fetch('login', {body: {username, password}}).then(
+        data => {
+            console.log('here the logged in user data', data);
+        },
+        error => {
+            console.error('oh no, login failed', error);
+        },
+    );
+*/
+
 const API_BASE_URL = "https://exampledomain.com";
 const LOCAL_STORAGE_KEY = "__your_site_token__"; // storage key for API authentication tokens
 
-export function request(endpoint, { body, ...customConfig } = {}) {
+const statusHandlers = {};
+const responseInterceptors = [];
+
+export function fetch(endpoint, { body, ...customConfig } = {}) {
+  // add bearer token if exists
   const token = localStorage.getItem(LOCAL_STORAGE_KEY);
   const headers = {};
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
   const config = {
-    method: body ? "POST" : "GET",
+    method: body ? "POST" : "GET", // auto set method if not set in config
     ...customConfig,
     headers: {
       ...headers,
@@ -24,27 +43,29 @@ export function request(endpoint, { body, ...customConfig } = {}) {
     config.body = body;
   }
 
-  return fetch(`${API_BASE_URL}/${endpoint}`, config).then(async (response) => {
-    if (response.status === 401) {
-      logout();
-      window.location.assign(window.location);
-      return;
-    }
-    if (response.ok) {
-      return await response.json();
-    } else {
-      const errorMessage = await response.text();
-      return Promise.reject(new Error(errorMessage));
-    }
-  });
+  return window
+    .fetch(`${API_BASE_URL}/${endpoint}`, config)
+    .then(async (response) => {
+      // execute any set status handlers for expected errors
+      if (Object.hasOwn(statusHandlers, response.status.toString())) {
+        statusHandlers[response.status.toString()]();
+        return await response.json();
+      }
+      if (response.ok) {
+        // success
+        const data = await response.json();
+        // execute any set response interceptors
+        responseInterceptors.forEach((interceptor) => interceptor(data));
+        return data;
+      } else {
+        // unexpected error
+        return Promise.reject(new Error(await response.text()));
+      }
+    });
 }
 
-export function login(token) {
+export function setAuthToken(token) {
   localStorage.setItem(LOCAL_STORAGE_KEY, token);
-}
-
-export function logout() {
-  localStorage.removeItem(LOCAL_STORAGE_KEY);
 }
 
 export function formDataToObject(formData) {
@@ -68,4 +89,23 @@ export function objectToFormData(objectData) {
     }
   });
   return formData;
+}
+
+// set status handlers to universally handle things like 401 unauthorized request responses
+export function addStatusHandler(statusCode, handler) {
+  statusHandlers[statusCode.toString()] = handler;
+}
+
+export function removeStatusHandler(statusCode) {
+  delete statusHandlers[statusCode];
+}
+
+// add response interceptors to universally check for certain data in responses
+export function addResponseInterceptor(interceptor) {
+  responseInterceptors.push(interceptor);
+}
+
+export function removeResponseInterceptor(interceptor) {
+  const index = responseInterceptors.indexOf(interceptor);
+  if (index !== -1) responseInterceptors.splice(index, 1);
 }
