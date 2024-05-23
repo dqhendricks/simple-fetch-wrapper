@@ -1,6 +1,6 @@
 import { describe, test, expect, vi } from "vitest";
 
-import * as client from "../Client";
+import * as client from "../client";
 
 const fakeApiData = {
   name: "Joni Baez",
@@ -22,19 +22,19 @@ const fakeObjectRequest = {
 
 vi.spyOn(window, "fetch").mockImplementation((endpoint, config) => {
   switch (endpoint) {
-    case "https://examplewebsite.com/success":
+    case "https://exampledomain.com/success":
       return Promise.resolve({
         ok: true,
         status: 200,
         json: () => Promise.resolve(fakeApiData),
       });
-    case "https://examplewebsite.com/failure":
+    case "https://exampledomain.com/failure":
       return Promise.resolve({
         ok: false,
         status: 404,
         text: () => Promise.resolve("Page not found."),
       });
-    case "https://examplewebsite.com/unauthorized":
+    case "https://exampledomain.com/unauthorized":
       return Promise.resolve({
         ok: false,
         status: 401,
@@ -46,12 +46,12 @@ describe("Client.js utility", () => {
   // fetching
 
   test("Basic fetch success.", async () => {
-    const data = await client.request("success");
+    const data = await client.fetch("success");
     expect(data).toEqual(fakeApiData);
   });
 
   test("Basic fetch failure (404).", async () => {
-    await expect(client.request("failure")).rejects.toThrow("Page not found.");
+    await expect(client.fetch("failure")).rejects.toThrow("Page not found.");
   });
 
   // request conversions
