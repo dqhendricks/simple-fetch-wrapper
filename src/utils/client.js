@@ -47,7 +47,7 @@ export function fetch(endpoint, { body, ...customConfig } = {}) {
     .fetch(`${API_BASE_URL}/${endpoint}`, config)
     .then(async (response) => {
       // execute any set status handlers for expected errors
-      if (Object.hasOwn(statusHandlers, response.status.toString())) {
+      if (response.status.toString() in statusHandlers) {
         statusHandlers[response.status.toString()]();
         return await response.json();
       }
