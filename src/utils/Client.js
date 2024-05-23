@@ -100,7 +100,7 @@ export function removeStatusHandler(statusCode) {
   delete statusHandlers[statusCode];
 }
 
-// add response interceptors to universally check for certain data in responses
+// add response interceptors to universally handle certain data in responses
 export function addResponseInterceptor(interceptor) {
   responseInterceptors.push(interceptor);
 }
