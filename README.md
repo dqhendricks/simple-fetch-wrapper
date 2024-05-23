@@ -8,7 +8,7 @@ This JS utility module abstracts away some of the common additional fetch-relate
 * Set and automatically use bearer tokens (uses local storage, so must safeguard against XXS attacks).
 * Register universal status handlers to handle things like 401 (unauthorized request) responses.
 * Register response interceptors to universally handle certain data in responses.
-* Conversion utilities for FormData->Object and Object->FormData.
+* Conversion utilities for FormData->object and object->FormData.
 
 **Usage examples:**
 
