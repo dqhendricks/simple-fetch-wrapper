@@ -37,6 +37,6 @@ client.addStatusHandler(401, () => {
 
 client.addResponseInterceptor((data) => {
   // check response data for all requests to handle certain data in responses
-  // code could easily be modified to run universal data conversions as well, but would then require you to return data from all handlers
+  // code could easily be modified to run universal data conversions as well, but would then require you to return data from all interceptors
 }
 ```
