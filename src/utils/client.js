@@ -97,7 +97,7 @@ export function addStatusHandler(statusCode, handler) {
 }
 
 export function removeStatusHandler(statusCode) {
-  delete statusHandlers[statusCode];
+  delete statusHandlers[statusCode.toString()];
 }
 
 // add response interceptors to universally handle certain data in responses
