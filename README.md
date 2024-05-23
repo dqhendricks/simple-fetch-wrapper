@@ -14,7 +14,7 @@ This JS utility module abstracts away some of the common additional fetch-relate
 
 ```
 // basic usage
-import * as client from "./Client.js";
+import * as client from "./client.js";
 
 client.request('login', {body: {username, password}}).then(
     data => {
@@ -28,7 +28,7 @@ client.request('login', {body: {username, password}}).then(
 
 ```
 // set status handlers and interceptors
-import * as client from "./Client.js";
+import * as client from "./client.js";
 
 client.addStatusHandler(401, () => {
   // unauthorized request
