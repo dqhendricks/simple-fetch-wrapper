@@ -35,7 +35,7 @@ client.addStatusHandler(401, () => {
   // do soomething like set isAuthenticated to false in global state here
 });
 
-client..addResponseInterceptor((data) => {
+client.addResponseInterceptor((data) => {
   // check response data for all requests to handle certain data in responses
   // code could easily be modified to run universal data conversions as well, but would then require you to return data from all handlers
 }
