@@ -49,13 +49,18 @@ export function fetch(endpoint, { body, ...customConfig } = {}) {
       // execute any set status handlers for expected errors
       if (response.status.toString() in statusHandlers) {
         statusHandlers[response.status.toString()]();
-        return await response.json();
       }
       if (response.ok) {
         // success
         const data = await response.json();
         // execute any set response interceptors
-        responseInterceptors.forEach((interceptor) => interceptor(data));
+        responseInterceptors.forEach((interceptor) => {
+          data = interceptor(data);
+        });
+        if (data === undefined)
+          throw new Error(
+            "All registered response interceptors must return a response data value."
+          );
         return data;
       } else {
         // unexpected error
@@ -100,7 +105,7 @@ export function removeStatusHandler(statusCode) {
   delete statusHandlers[statusCode.toString()];
 }
 
-// add response interceptors to universally handle certain data in responses
+// add response interceptors to universally handle/mutate certain data in responses (can accept and must return a new data value)
 export function addResponseInterceptor(interceptor) {
   responseInterceptors.push(interceptor);
 }
