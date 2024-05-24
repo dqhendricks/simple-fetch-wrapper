@@ -52,7 +52,7 @@ export function fetch(endpoint, { body, ...customConfig } = {}) {
       }
       if (response.ok) {
         // success
-        const data = await response.json();
+        let data = await response.json();
         // execute any set response interceptors
         responseInterceptors.forEach((interceptor) => {
           data = interceptor(data);
