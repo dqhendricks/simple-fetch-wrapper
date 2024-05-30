@@ -26,6 +26,15 @@ export function fetch(endpoint, { body, ...customConfig } = {}) {
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
+  // allow both FormData or object fetch requests
+  if (body) {
+    if (body instanceof FormData !== true) {
+      body = JSON.stringify(body);
+      headers["Content-Type"] = "application/json";
+    }
+    customConfig.body = body;
+  }
+  // assemble config
   const config = {
     method: body ? "POST" : "GET", // auto set method if not set in config
     ...customConfig,
@@ -34,14 +43,6 @@ export function fetch(endpoint, { body, ...customConfig } = {}) {
       ...customConfig.headers,
     },
   };
-  // allow both FormData or Object fetch requests
-  if (body) {
-    if (body instanceof FormData !== true) {
-      body = JSON.stringify(body);
-      headers["content-type"] = "application/json";
-    }
-    config.body = body;
-  }
 
   return window
     .fetch(`${API_BASE_URL}/${endpoint}`, config)
